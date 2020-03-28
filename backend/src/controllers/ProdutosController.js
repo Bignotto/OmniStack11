@@ -1,26 +1,22 @@
 const connection = require("../database/connection");
-const crypto = require("crypto");
 
 module.exports = {
   async create(req, res) {
-    const { nome, endereco, telefone, email, cidade, uf } = req.body;
-    const id = crypto.randomBytes(4).toString("HEX");
+    const { nome, descricao, valor } = req.body;
+    const produtor_id = req.headers.authorization;
 
-    await connection("produtor").insert({
-      id,
+    const [id] = await connection("produtos").insert({
       nome,
-      endereco,
-      telefone,
-      email,
-      cidade,
-      uf
+      descricao,
+      valor,
+      produtor_id
     });
 
     return res.json({ id });
   },
 
   async index(req, res) {
-    const produtores = await connection("produtor").select("*");
-    return res.json(produtores);
+    const produtos = await connection("produtos").select("*");
+    return res.json(produtos);
   }
 };
