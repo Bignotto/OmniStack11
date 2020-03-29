@@ -17,7 +17,7 @@ export default function Registro() {
             Faça seu cadastro, entre na plataforma e divulgue seus produtos!
           </p>
           <Link to="/" className="text-link">
-            <FiArrowLeft size="16" color="#E02041" />
+            <FiArrowLeft size={16} color="#E02041" />
             Voltar
           </Link>
         </section>
