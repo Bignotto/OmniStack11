@@ -16,7 +16,25 @@ module.exports = {
   },
 
   async index(req, res) {
-    const produtos = await connection("produtos").select("*");
+    const { page = 1 } = req.query;
+
+    const [qtd] = await connection("produtos").count();
+
+    //FIXME: protudos e produtor com o campo nome
+    const produtos = await connection("produtos")
+      .join("produtor", "produtor.id", "=", "produtos.produtor_id")
+      .limit(5)
+      .offset((page - 1) * 5)
+      .select([
+        "produtos.*",
+        "produtos.nome",
+        "produtor.cidade",
+        "produtor.uf",
+        "produtor.telefone",
+        "produtor.email"
+      ]);
+
+    res.header("X-Total-Count", qtd["count(*)"]);
     return res.json(produtos);
   },
 
