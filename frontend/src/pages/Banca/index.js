@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { FiPower, FiTrash2 } from "react-icons/fi";
 
 import api from "../../services/api";
@@ -10,6 +10,8 @@ import "./styles.css";
 
 export default function Banca() {
   const [produtos, setProdutos] = useState([]);
+
+  const history = useHistory();
 
   const nomeProdutor = localStorage.getItem("nome");
   const idProdutor = localStorage.getItem("id");
@@ -39,15 +41,22 @@ export default function Banca() {
     }
   }
 
+  function handleLogout() {
+    localStorage.clear();
+    history.push("/");
+  }
+
   return (
     <div className="banca-container">
       <header>
         <img src={logoImg} alt="Produtores Unidos!" />
-        <span>Bem vindo {nomeProdutor}</span>
+        <span>
+          Bem vindo {nomeProdutor} ID: {idProdutor}
+        </span>
         <Link className="button" to="/produto/novo">
           Novo produto
         </Link>
-        <button type="button">
+        <button type="button" onClick={handleLogout}>
           <FiPower size={18} color="#E02041" />
         </button>
       </header>
