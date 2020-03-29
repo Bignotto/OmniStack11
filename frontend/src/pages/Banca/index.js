@@ -12,7 +12,7 @@ export default function Banca() {
       <header>
         <img src={logoImg} alt="Produtores Unidos!" />
         <span>Bem vindo Thiago</span>
-        <Link className="button" to="/banca/novo">
+        <Link className="button" to="/produto/novo">
           Novo produto
         </Link>
         <button type="button">
