@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Image, Text, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 import styles from "./styles";
 
@@ -8,6 +9,12 @@ import logo from "../../assets/logo.png";
 import { FlatList } from "react-native-gesture-handler";
 
 export default function Produtos() {
+  const navigation = useNavigation();
+
+  function navigateToDetalhes() {
+    navigation.navigate("Detalhes");
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -35,7 +42,10 @@ export default function Produtos() {
               <Text style={styles.productListTitle}>Preço</Text>
               <Text style={styles.productListText}>R$ 199,90</Text>
 
-              <TouchableOpacity style={styles.detailsButton}>
+              <TouchableOpacity
+                style={styles.detailsButton}
+                onPress={navigateToDetalhes}
+              >
                 <Text style={styles.detailsButtonText}>
                   Detalhes{" "}
                   <Feather name="arrow-right" size={16} color="#E02041" />
