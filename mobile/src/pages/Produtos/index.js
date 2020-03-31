@@ -12,16 +12,27 @@ import { FlatList } from "react-native-gesture-handler";
 export default function Produtos() {
   const [produtos, setProdutos] = useState([]);
   const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
-  function navigateToDetalhes() {
-    navigation.navigate("Detalhes");
+  function navigateToDetalhes(produto) {
+    navigation.navigate("Detalhes", { produto });
   }
 
   async function loadProdutos() {
-    const response = await api.get("produtos");
+    if (loading) return;
+    if (total > 0 && produtos.length === total) return;
+
+    setLoading(true);
+
+    const response = await api.get("produtos", { params: { page } });
+
     setTotal(response.headers["x-total-count"]);
-    setProdutos(response.data);
+    setProdutos([...produtos, ...response.data]);
+
+    setLoading(false);
+    setPage(page + 1);
   }
 
   useEffect(() => {
@@ -43,6 +54,8 @@ export default function Produtos() {
         data={produtos}
         style={styles.productList}
         keyExtractor={i => String(i.id)}
+        onEndReached={loadProdutos}
+        onEndReachedThreshold={0.2}
         renderItem={({ item: produto }) => (
           <View style={styles.productList}>
             <View style={styles.productContainer}>
@@ -62,7 +75,7 @@ export default function Produtos() {
 
               <TouchableOpacity
                 style={styles.detailsButton}
-                onPress={navigateToDetalhes}
+                onPress={() => navigateToDetalhes(produto)}
               >
                 <Text style={styles.detailsButtonText}>
                   Detalhes{" "}

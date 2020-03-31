@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Image, Text, TouchableOpacity, Linking } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import * as MailComposer from "expo-mail-composer";
 
 import styles from "./styles";
@@ -10,6 +10,10 @@ import logo from "../../assets/logo.png";
 
 export default function Produtos() {
   const navigation = useNavigation();
+  const route = useRoute();
+  const produto = route.params.produto;
+
+  const msgBody = `Gostaria de comprar o produto ${produto.nome}`;
 
   function navigateBack() {
     navigation.goBack();
@@ -22,12 +26,14 @@ export default function Produtos() {
     //   body: "Quero comprar o produto XXX"
     // });
     Linking.openURL(
-      `mailto:somethingemail@gmail.com?subject=abcdefg&body=body`
+      `mailto:${produto.email}?subject=ProdutorRC: Me interessei por seus produtos&body=${msgBody}`
     );
   }
 
   function sendWhatsApp() {
-    Linking.openURL(`whatsapp://send?phone=5519982287773&text="hahaha"`);
+    Linking.openURL(
+      `whatsapp://send?phone=${produto.telefone}&text="${msgBody}"`
+    );
   }
 
   return (
@@ -44,18 +50,16 @@ export default function Produtos() {
         <Text style={([styles.productListTitle], { marginTop: 0 })}>
           Produtor:
         </Text>
-        <Text style={styles.productListText}>Thiago Bignotto</Text>
+        <Text style={styles.productListText}>{produto.produtor_id}</Text>
 
         <Text style={styles.productListTitle}>Produto:</Text>
-        <Text style={styles.productListText}>Urna 020 sombreada.</Text>
+        <Text style={styles.productListText}>{produto.nome}</Text>
 
         <Text style={styles.productListTitle}>Descrição:</Text>
-        <Text style={styles.productListText}>
-          Urna 020 sombreada com visor varão e renda.
-        </Text>
+        <Text style={styles.productListText}>{produto.descricao}</Text>
 
         <Text style={styles.productListTitle}>Preço</Text>
-        <Text style={styles.productListText}>R$ 199,90</Text>
+        <Text style={styles.productListText}>{produto.valor}</Text>
       </View>
 
       <View style={styles.contactBox}>
